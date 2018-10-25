@@ -306,7 +306,7 @@ def consistency_check(text, word_pairs, err, msg, offset=0):
 
 
 def preferred_forms_check(text, list, err, msg, ignore_case=True, offset=0,
-                          max_errors=float("inf")):
+                          max_errors=float("inf"), require_padding=True, ):
     """Build a checker that suggests the preferred form."""
     if ignore_case:
         flags = re.IGNORECASE
@@ -316,7 +316,12 @@ def preferred_forms_check(text, list, err, msg, ignore_case=True, offset=0,
     msg = " ".join(msg.split())
 
     errors = []
-    regex = u"[\W^]{}[\W$]"
+
+    if require_padding:
+        regex = u"(?:^|\W){}[\W$]"
+    else:
+        regex = u"{}"
+
     for p in list:
         for r in p[1]:
             for m in re.finditer(regex.format(r), text, flags=flags):
