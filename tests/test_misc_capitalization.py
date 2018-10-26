@@ -30,3 +30,9 @@ class TestCheck(Check):
         """Basic smoke test for misc.capitalization.check_days."""
         assert chk.check_days("""Smoke phrase with nothing flagged""") == []
         assert chk.check_days("""It happened on friday.""") != []
+
+    def test_smoke_check_emails(self):
+        """Basic smoke test for misc.capitalization.check_emails."""
+        assert chk.check_emails("""Smoke phrase with nothing flagged.""") == []
+        assert chk.check_emails("""Contact us on hello@amperser.com""") == []
+        assert chk.check_emails("""Contact us on Hello@AMPERSER.COM .""") != []

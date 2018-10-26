@@ -13,6 +13,8 @@ categories: writing
 Incorrect capitalization.
 
 """
+import re
+
 from proselint.tools import memoize, preferred_forms_check
 
 
@@ -91,3 +93,18 @@ def check_days(text):
     ]
 
     return preferred_forms_check(text, list, err, msg, ignore_case=False)
+
+
+@memoize
+def check_emails(text):
+    """Checks whether the email is in uppercase or not"""
+    err = 'MAU102'
+    msg = "Email should be capitalized. '{}' is the preferred form."
+
+    # Two regex rules - uppercase in LHS and uppercase in RHS
+    regex = r"\w*[A-Z]+\w+@[\w\.-]+|[\w\.-]+@\w*[A-Z]+\w+[\w\.-]+"
+    emails = re.findall(pattern=regex, string=text)
+
+    email_list = [[email.lower(), [email]] for email in emails]
+
+    return preferred_forms_check(text, email_list, err, msg, ignore_case=False)
