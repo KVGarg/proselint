@@ -321,12 +321,13 @@ def preferred_forms_check(text, list, err, msg, ignore_case=True, offset=0,
         for r in p[1]:
             for m in re.finditer(regex.format(r), text, flags=flags):
                 txt = m.group(0).strip()
-                errors.append((
-                    m.start() + 1 + offset,
-                    m.end() + offset,
-                    err,
-                    msg.format(p[0], txt),
-                    p[0]))
+                if txt[0].isalpha():
+                    errors.append((
+                        m.start() + 1 + offset,
+                        m.end() + offset,
+                        err,
+                        msg.format(p[0], txt),
+                        p[0]))
 
     errors = truncate_to_max(errors, max_errors)
 
